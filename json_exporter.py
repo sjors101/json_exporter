@@ -35,8 +35,8 @@ def collect_metrics(endpoint):
     except json.decoder.JSONDecodeError:
         exception_error = 'ERROR, this is not JSON, is the url correct?'
         return exception_error
-    except:
-        exception_error = "ERROR, unexpected:", sys.exc_info()[0]
+    except requests.exceptions.InvalidURL:
+        exception_error = 'ERROR, cannot access this endpoint, is the url correct?'
         return exception_error
 
 
