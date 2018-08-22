@@ -43,7 +43,6 @@ def collect_metrics(endpoint):
 def set_gauge(endpoint_metrics):
     # set gauge before starting http_server
     gauge_list = list()
-
     for key, metrics in endpoint_metrics.items():
         gauge_list.append(Gauge(key, "- This metric is exposed via json_exporter.py"))
     return gauge_list
@@ -62,8 +61,12 @@ if __name__ == '__main__':
         print("Usage: json_exporter.py <port> <http://endpoint/metrics>")
     else:
         endpoint_metrics = collect_metrics(sys.argv[2])
-        gauge_list = set_gauge(endpoint_metrics)
-        start_http_server(int(sys.argv[1]))
+        if "ERROR" in endpoint_metrics:
+            print (endpoint_metrics)
+            exit()
+        else:
+            gauge_list = set_gauge(endpoint_metrics)
+            start_http_server(int(sys.argv[1]))
 
         while True:
             endpoint_metrics = collect_metrics(sys.argv[2])
